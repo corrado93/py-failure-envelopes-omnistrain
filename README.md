@@ -1,6 +1,6 @@
 ## Description of the script
 
-This script was developed to compute generate omni-strain failure envelopes (Tsai and Melo, 2014).
+This script was developed to generate extended omni-strain failure envelopes (G. Corrado et al., An extended invariant approach to laminate failure of fibre-reinforced polymer structures. The Aeronautical Journal, https://doi.org/10.1017/aer.2021.121).
 In this script, the failure loci are computed using the 3D invariant-based failure theory for all possible ply orientations, where the number of ply orientations (from 0º to 90º) can be modified by the user.
 Results can be visualized in 3 ways: using pyplot, using matplotlib and using excel.
 
