@@ -748,7 +748,7 @@ if ExcelOutput == 'YES':
         'values':     [worksheetName, 3, int(4*len(SXX)+8), int(ENNE_deg+3), int(4*len(SXX)+8)],
         'line':       {'color': 'black'},
         })
-    chart1.set_x_axis({'name': SSXlab,
+    chart1.set_x_axis({'name': SSXlab + ' [MPa]',
               'name_font': {
                     'name': 'Segoe UI',
                     'size': 15,
@@ -762,7 +762,7 @@ if ExcelOutput == 'YES':
                             'dash_type': 'solid'}},
               'major_tick_mark': 'none', # choose between: none, inside, outside, cross
               'minor_tick_mark': 'none'})
-    chart1.set_y_axis({'name': SSYlab,
+    chart1.set_y_axis({'name': SSYlab  + ' [MPa]',
                 'name_font': {
                     'name': 'Segoe UI',
                     'size': 15,
