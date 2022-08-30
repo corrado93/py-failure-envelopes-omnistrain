@@ -19,12 +19,14 @@ from _includes.omni_env_script import *
 print('computing the omni-strain failure envelopes...')
 #
 if Symmetric == 'YES':
+    Layup_label = str(Layup)+'s'
     N_sym = len(Layup)
     for xnum in range(N_sym):
         xnum = xnum + 1
         Layup.append(Layup[N_sym-xnum])
 else:
-    pass
+    Layup_label = str(Layup)
+#
 Ntot = len(Layup)
 #
 DEG2RAD = math.pi / 180.0
@@ -554,7 +556,7 @@ if PlotFigure == 'YES':
 if ExcelOutput == 'YES':
     workbook   = xlsxwriter.Workbook('_results/' +
         Omni_label + '_' + SX + SY + '_Inv3DFC_' + load_label +
-        '_' + mat_label + '_test.xlsx')
+        '_' + mat_label + '.xlsx')
     #
     worksheet1 = workbook.add_worksheet('Overview')
     worksheet1.write_string(1, 1, 'BRIEF OVERVIEW OF THE WORKBOOK:',)
@@ -566,7 +568,7 @@ if ExcelOutput == 'YES':
                             SXlab + ' - ' + SYlab,)
     worksheet1.write_string(4, 1, '-The laminate layup considered for the '+
                             ' the generation of ' + Omni_label +
-                            ' in stress space is: ' + str(Layup),)
+                            ' in stress space is: ' + Layup_label,)
     #
     worksheetName = 'Omni-strain failure data'
     worksheet2 = workbook.add_worksheet(worksheetName)
@@ -632,7 +634,7 @@ if ExcelOutput == 'YES':
     worksheet2.write_string(2, int(4*len(SXX)+8), SSYlab, header_format)
     worksheet2.write_column(3, int(4*len(SXX)+8), SSYYmin)
     worksheet2.write_string(1, int(4*len(SXX)+7), Omni_label+ ' in stress space ', header_format2)
-    worksheet2.write_string(0, int(4*len(SXX)+7), 'Layup : '+ str(Layup), header_format2)
+    worksheet2.write_string(0, int(4*len(SXX)+7), 'Layup : '+ Layup_label, header_format2)
     worksheet2.write_column(3, int(4*len(SXX)+9), PHIcrit)
     worksheet2.write_string(2, int(4*len(SXX)+9), 'ϕ (deg)', header_format)
     worksheet2.data_validation(2, int(4*len(SXX)+9),2, int(4*len(SXX)+9),{
@@ -742,7 +744,7 @@ if ExcelOutput == 'YES':
                                 'dash_type': 'solid'}},
                 'major_tick_mark': 'none', # choose between: none, inside, outside, cross
                 'minor_tick_mark': 'none'})
-    chart1.set_title({'name': str(Layup)+' '+ mat_label,
+    chart1.set_title({'name': Layup_label+' '+ mat_label,
                     'name_font': {
                         'name': 'Segoe UI',
                         'size': 14,

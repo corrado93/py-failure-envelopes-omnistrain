@@ -33,16 +33,16 @@ import material_data
 # or add a new one with the same number of variable (or keys) contained
 # in the dictionary.
 #   materials = IM78552, EglassMY750, custom ...
-material = material_data.EglassMY750
+material = material_data.IM78552
 
 # Laminate design 
 # (Needed to represent failure envelopes in STRESS SPACE)
 
 Symmetric = 'YES'       #'YES' or 'NO'
 # INPUT YOUR LAYUP BELOW [use orientation from -90 to 90]
-Layup = [55, -55]
+Layup = [45, 0, -45, 90]
+#Layup = [55, -55]
 #Layup = [0, 0, 90, 90, 0, 0]
-#Layup = [45, 0, -45, 90]
 
 # Omni-strain envelope
 # Choose the strain loading on X axis 
