@@ -238,6 +238,7 @@ else:
         [  0,     0,      0,    A44,    A45,      0],
         [  0,     0,      0,    A45,    A55,      0],
         [A16,   A26,    A36,      0,      0,    A66]])
+
 #
 TOLER = 1.0e-06
 tol4 = 1.0e-05
@@ -312,10 +313,8 @@ else:
 IMAX = 5000
 
 S_out = []
-SXSY = []
 SX_out = []
 SY_out = []
-S_out12 = []
 IMAXfail = []
 
 thetaRR = 90
@@ -323,7 +322,6 @@ ThetaS = list(range(0, thetaRR, deltaTheta))
 ThetaS.append(thetaRR)
 for thetaRdeg in ThetaS:
     S_out.append([])
-    SXSY.append([])
     print('failure envelope for ply orientation = ',thetaRdeg, 'deg ...')
     thetaR = thetaRdeg * DEG2RAD
     #
@@ -386,11 +384,6 @@ for thetaRdeg in ThetaS:
                 b = c
             iterI += 1
         #
-        if PlaneStress_2D == 'YES':
-            S_vec = np.array([ 0., 0., 0.])
-        else:
-            S_vec = np.array([ 0., 0., 0., 0., 0., 0.])
-        #
         if iterI < IMAX:
 
             if gamma_i>2:
@@ -399,63 +392,15 @@ for thetaRdeg in ThetaS:
                 if diff1> 0.5 or diff2> 0.5:
                     S_out[-1].append([(SX_out[-1][0]),(SY_out[-1][0]),
                                                     FLAG, PHI_D, PSI_D])
-                    S_vec[SX_index]=SX_out[-1][0]
-                    S_vec[SY_index]=SY_out[-1][0]
-                    SS_vec = np.matmul(A, S_vec)
-                    if PlaneStress_2D == 'YES':
-                        s11 = SS_vec[0]
-                        s22 = SS_vec[1]
-                        s12 = SS_vec[2]
-                        SXSY[-1].append([s11, s22, s12])
-                    else:   
-                        s11 = SS_vec[0]
-                        s22 = SS_vec[1]
-                        s33 = SS_vec[2]
-                        s23 = SS_vec[3]
-                        s13 = SS_vec[4]
-                        s12 = SS_vec[5]
-                        SXSY[-1].append([s11, s22, s33, s23, s13, s12])
                     #
                 else:
                     S_out[-1].append([SXX, SYY, FLAG, PHI_D, PSI_D])
                     SX_out.append([SXX])
                     SY_out.append([SYY])
-                    S_vec[SX_index]=SXX
-                    S_vec[SY_index]=SYY
-                    SS_vec = np.matmul(A, S_vec)
-                    if PlaneStress_2D == 'YES':
-                        s11 = SS_vec[0]
-                        s22 = SS_vec[1]
-                        s12 = SS_vec[2]
-                        SXSY[-1].append([s11, s22, s12])
-                    else:   
-                        s11 = SS_vec[0]
-                        s22 = SS_vec[1]
-                        s33 = SS_vec[2]
-                        s23 = SS_vec[3]
-                        s13 = SS_vec[4]
-                        s12 = SS_vec[5]
-                        SXSY[-1].append([s11, s22, s33, s23, s13, s12])
             else:
                 S_out[-1].append([SXX, SYY, FLAG, PHI_D, PSI_D])
                 SY_out.append([SYY])
                 SX_out.append([SXX])
-                S_vec[SX_index] = SXX
-                S_vec[SY_index] = SYY
-                SS_vec = np.matmul(A, S_vec)
-                if PlaneStress_2D == 'YES':
-                    s11 = SS_vec[0]
-                    s22 = SS_vec[1]
-                    s12 = SS_vec[2]
-                    SXSY[-1].append([s11, s22, s12])
-                else:   
-                    s11 = SS_vec[0]
-                    s22 = SS_vec[1]
-                    s33 = SS_vec[2]
-                    s23 = SS_vec[3]
-                    s13 = SS_vec[4]
-                    s12 = SS_vec[5]
-                    SXSY[-1].append([s11, s22, s33, s23, s13, s12])
         else:
             print('Maximum number of iterations reached!')
             print('IMAX=', iterI)
@@ -464,29 +409,15 @@ for thetaRdeg in ThetaS:
             SX_out.append([SXX])
             S_out[-1].append([(SX_out[-1][0]),(SY_out[-1][0]),
                                                     FLAG, PHI_D, PSI_D])
-            S_vec[SX_index]=SXX
-            S_vec[SY_index]=SYY
-            SS_vec = np.matmul(A, S_vec)
-            if PlaneStress_2D == 'YES':
-                s11 = SS_vec[0]
-                s22 = SS_vec[1]
-                s12 = SS_vec[2]
-                SXSY[-1].append([s11, s22, s12])
-            else:   
-                s11 = SS_vec[0]
-                s22 = SS_vec[1]
-                s33 = SS_vec[2]
-                s23 = SS_vec[3]
-                s13 = SS_vec[4]
-                s12 = SS_vec[5]
-                SXSY[-1].append([s11, s22, s33, s23, s13, s12])
 #
 #----------------------------- PLOT -----------------------------------#
 
 if PlaneStress_2D == 'YES':
     load_label = 'InPlaneLoading'
+    load_label_long = 'in-plane loading conditions'
 else:
     load_label = '3DLoading'
+    load_label_long = 'general 3D loading conditions'
 
 SXX = []
 SYY = []
@@ -501,13 +432,6 @@ for SS_out in S_out:
     PHIS.append([round(value[3],1) for value in SS_out])
     PSIS.append([round(value[4],1) for value in SS_out])
 
-SSXX = []
-SSYY = []
-SSXXmin = []
-SSYYmin = []
-for SXSY_out in SXSY:
-    SSXX.append([value[SX_index] for value in SXSY_out])
-    SSYY.append([value[SY_index] for value in SXSY_out])
 
 SXXmin = []
 SYYmin = []
@@ -521,26 +445,49 @@ for i in range(len(SXX[0])): #len(SXX[0])= failure points for each envelope
     vecFLG = np.zeros(len(S_out))
     vecPHI = np.zeros(len(S_out))
     vecPSI = np.zeros(len(S_out))
-    vecSXX = np.zeros(len(S_out))
-    vecSYY = np.zeros(len(S_out))
     for j in range(len(S_out)):
         vecXX[j] = SXX[j][i]
         vecYY[j] = SYY[j][i]
         vecFLG[j] = FLAGS[j][i]
         vecPHI[j] = PHIS[j][i]
         vecPSI[j] = PSIS[j][i]
-        vecSXX[j] = SSXX[j][i]
-        vecSYY[j] = SSYY[j][i]
     # argmin returns the indices of the min value along an axis
     iminXX = np.argmin(abs(vecXX))
     iminYY = np.argmin(abs(vecYY))
     SXXmin.append(vecXX[iminXX])
     SYYmin.append(vecYY[iminYY])
-    SSXXmin.append(vecSXX[iminXX])
-    SSYYmin.append(vecSYY[iminYY])
     FLAGcrit.append(vecFLG[np.minimum(iminXX,iminYY)])
     PHIcrit.append(vecPHI[np.minimum(iminXX,iminYY)])
     PSIcrit.append(vecPSI[np.minimum(iminXX,iminYY)])
+
+SSXXmin = []
+SSYYmin = []
+
+for i in range(len(SXXmin)):
+    if PlaneStress_2D == 'YES':
+        S_vec = np.zeros(3)
+    else:
+        S_vec = np.zeros(6)
+    #
+    S_vec[SX_index]=SXXmin[i]
+    S_vec[SY_index]=SYYmin[i]
+    SS_vec = np.matmul(A, S_vec)
+    if PlaneStress_2D == 'YES':
+        s11 = SS_vec[0]
+        s22 = SS_vec[1]
+        s12 = SS_vec[2]
+        SSXXmin.append(SS_vec[SX_index])
+        SSYYmin.append(SS_vec[SY_index])
+    else:   
+        s11 = SS_vec[0]
+        s22 = SS_vec[1]
+        s33 = SS_vec[2]
+        s23 = SS_vec[3]
+        s13 = SS_vec[4]
+        s12 = SS_vec[5]
+        SSXXmin.append(SS_vec[SX_index])
+        SSYYmin.append(SS_vec[SY_index])
+
 
 colours = ['r', 'g', 'b', 'yellowgreen', 'm', 'c', 'navy', 'peru',
            'darkslateblue', 'goldenrod']
@@ -614,8 +561,8 @@ if ExcelOutput == 'YES':
     worksheet1.write_string(2, 1, '-In this workbook you will find the '+
                             Omni_label + ' envelope for '+
                             mat_label + '.',)
-    worksheet1.write_string(3, 1, '-"'+ load_label + '"' 
-                            ' was applied, in the following axis:  '+
+    worksheet1.write_string(3, 1, '-Under the assumption of "'+ load_label_long + '"' 
+                            ' , load was applied in the following axis:  '+
                             SXlab + ' - ' + SYlab,)
     worksheet1.write_string(4, 1, '-The laminate layup considered for the '+
                             ' the generation of ' + Omni_label +
