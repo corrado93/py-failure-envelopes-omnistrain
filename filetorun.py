@@ -588,7 +588,7 @@ if PlotFigure == 'YES':
     ax.axvline(x=0, color='k', linewidth=1.0)
     for i in range(len(SXX)):
         plt.plot(SXX[i], SYY[i], colours[i], linewidth=2.0,
-                label=' ' + str(i * deltaTheta) + 'º ply')
+                label='[' + str(i * deltaTheta) + ']')
     plt.plot(SXXmin, SYYmin, color='k', linewidth=3.0, label=' '+Omni_label)
 
     ax.legend(loc='upper center', bbox_to_anchor=(1.25, 0.75))
@@ -606,10 +606,10 @@ if PlotFigure == 'YES':
 
 if ExcelOutput == 'YES':
     workbook   = xlsxwriter.Workbook('_results/' +
-        Omni_label + '_' + SX + SY + '_' + '_Inv3DFC_' + load_label +
+        Omni_label + '_' + SX + SY + '_Inv3DFC_' + load_label +
         '_' + mat_label + '_test.xlsx')
     #
-    worksheet1 = workbook.add_worksheet('Main')
+    worksheet1 = workbook.add_worksheet('Overview')
     worksheet1.write_string(1, 1, 'BRIEF OVERVIEW OF THE WORKBOOK:',)
     worksheet1.write_string(2, 1, '-In this workbook you will find the '+
                             Omni_label + ' envelope for '+
@@ -621,10 +621,9 @@ if ExcelOutput == 'YES':
                             ' the generation of ' + Omni_label +
                             ' in stress space is: ' + str(Layup),)
     #
-    worksheetName = 'Omni_strain_env'
+    worksheetName = 'Omni-strain failure data'
     worksheet2 = workbook.add_worksheet(worksheetName)
     chart =  workbook.add_chart({'type': 'scatter', 'subtype': 'smooth'})
-    plylabel = 'º ply'
     #
     cell_format = workbook.add_format()
     cell_format.set_bottom()
@@ -663,7 +662,7 @@ if ExcelOutput == 'YES':
             'validate': 'any','input_message': 
             'Angle of the kinking plane (deg)',})
         worksheet2.write_column(3, int(3+4*i), PSIS[i], cell_format2)
-        worksheet2.write_string(1, int(4*i), str(i*deltaTheta) + plylabel, 
+        worksheet2.write_string(1, int(4*i), '['+str(i*deltaTheta) + ']', 
                                 header_format)
         chart.add_series({
             'name':       [worksheetName, 1, int(4*i)]  ,
@@ -696,6 +695,10 @@ if ExcelOutput == 'YES':
     worksheet2.data_validation(2, int(4*len(SXX)+10),2, int(4*len(SXX)+10),{
             'validate': 'any','input_message': 
             'Angle of the kinking plane (deg)',})
+    #
+    ##########################################################################
+    #
+    worksheet3 = workbook.add_worksheet('Charts')        
 
     chart.add_series({
         'name':       [worksheetName, 1, int(4*len(SXX)+1)] ,  
@@ -709,7 +712,7 @@ if ExcelOutput == 'YES':
     chart.set_x_axis({'name': SXlab,
                 'name_font': {
                     'name': 'Segoe UI',
-                    'size': 15,
+                    'size': 14,
                     'bold': True},
     #                      'label_position': 'low',
                 'num_font':  {'name': 'Segoe UI','size':12 },
@@ -723,9 +726,11 @@ if ExcelOutput == 'YES':
     chart.set_y_axis({'name': SYlab,
                 'name_font': {
                     'name': 'Segoe UI',
-                    'size': 15,
+                    'size': 14,
                     'bold': True},
-    #                  'label_position': 'low',
+                'name_layout':{
+                            'x':      0.0,
+                            'y':      0.45},
                 'num_font':  {'name': 'Segoe UI','size':12 },
                 'line': {'color': 'black','width': 1.00},
                 'major_gridlines': {
@@ -734,10 +739,23 @@ if ExcelOutput == 'YES':
                                 'dash_type': 'solid'}},
                 'major_tick_mark': 'none', # choose between: none, inside, outside, cross
                 'minor_tick_mark': 'none'})
-    chart.set_title({'none': True})
-    chart.set_legend({'font': {'name': 'Segoe UI','size': 11}, 
-                    'position': 'right'})
-    worksheet2.insert_chart(3, int(4*len(SXX)+12), chart,{'x_scale': 1.5, 'y_scale': 1.5} )
+    chart.set_title({'name': mat_label,
+                    'name_font': {
+                        'name': 'Segoe UI',
+                        'size': 14,
+                        'bold': True}},)
+    chart.set_plotarea({
+                        'layout': {
+                            'x':      0.08,
+                            'y':      0.13,
+                            'width':  0.65,
+                            'height': 0.75,}})
+    chart.set_legend({'font': {'name': 'Segoe UI','size': 10.5},
+                    'layout': {'x':      0.76,
+                               'y':      0.12,
+                               'width':  0.24,
+                               'height': 0.80,}})
+    worksheet3.insert_chart(3+18*0, 3, chart,{'x_scale': 1.194, 'y_scale': 1.227} )
     ######### CHART 1 ##########
     chart1 =  workbook.add_chart({'type': 'scatter', 'subtype': 'smooth'})
     #scatter has the following subtypes: straight_with_markers, straight
@@ -751,9 +769,8 @@ if ExcelOutput == 'YES':
     chart1.set_x_axis({'name': SSXlab + ' [MPa]',
               'name_font': {
                     'name': 'Segoe UI',
-                    'size': 15,
+                    'size': 14,
                     'bold': True},
-    #                      'label_position': 'low',
               'num_font':  {'name': 'Segoe UI','size':12 },
               'line': {'color': 'black','width': 1.00},
               'major_gridlines': {
@@ -765,9 +782,11 @@ if ExcelOutput == 'YES':
     chart1.set_y_axis({'name': SSYlab  + ' [MPa]',
                 'name_font': {
                     'name': 'Segoe UI',
-                    'size': 15,
+                    'size': 14,
                     'bold': True},
-    #                  'label_position': 'low',
+                'name_layout':{
+                            'x':      0.0,
+                            'y':      0.40},
                 'num_font':  {'name': 'Segoe UI','size':12 },
                 'line': {'color': 'black','width': 1.00},
                 'major_gridlines': {
@@ -776,22 +795,25 @@ if ExcelOutput == 'YES':
                                 'dash_type': 'solid'}},
                 'major_tick_mark': 'none', # choose between: none, inside, outside, cross
                 'minor_tick_mark': 'none'})
-    chart1.set_title({'none': True})
-    chart1.set_legend({'font': {'name': 'Segoe UI','size': 11}, 
+    chart1.set_title({'name': str(Layup)+' '+ mat_label,
+                    'name_font': {
+                        'name': 'Segoe UI',
+                        'size': 14,
+                        'bold': True}},)
+    chart1.set_legend({'font': {'name': 'Segoe UI','size': 10.5}, 
                     'position': 'right'})
-    worksheet2.insert_chart(25, int(4*len(SXX)+12), chart1,{'x_scale': 1.5, 'y_scale': 1.5} )
+    worksheet3.insert_chart(3+18*0, 13, chart1,{'x_scale': 1.194, 'y_scale': 1.227} )
 
     ######### CHART 2 ##########
-    worksheet3 = workbook.add_worksheet('Additional charts')
-    worksheet3.write_string(0, 15, 'LEGEND:')
+    worksheet3.write_string(6+18*1, 11, 'LEGEND:')
     cell_format = workbook.add_format({'bold': True, 'font_color': 'cyan'})
-    worksheet3.write_string(1, 15, 'triangle(cyan): Fibre tensile failure',cell_format)
+    worksheet3.write_string(7+18*1, 11, 'triangle(cyan): Fibre tensile failure',cell_format)
     cell_format = workbook.add_format({'bold': True, 'font_color': 'green'})
-    worksheet3.write_string(2, 15, 'x(green): Fibre kinking when I3>0',cell_format)
-    worksheet3.write_string(4, 15, 'o(green): Matrix cracking when I3>0',cell_format)
+    worksheet3.write_string(8+18*1, 11, 'x(green): Fibre kinking when I3>0',cell_format)
+    worksheet3.write_string(10+18*1, 11, 'o(green): Matrix cracking when I3>0',cell_format)
     cell_format = workbook.add_format({'bold': True, 'font_color': 'red'})
-    worksheet3.write_string(3, 15, 'x(red): Fibre kinking when I3<0',cell_format)
-    worksheet3.write_string(5, 15, 'o(red): Matrix cracking when I3<0',cell_format)
+    worksheet3.write_string(9+18*1, 11, 'x(red): Fibre kinking when I3<0',cell_format)
+    worksheet3.write_string(11+18*1, 11, 'o(red): Matrix cracking when I3<0',cell_format)
     chart2 =  workbook.add_chart({'type': 'scatter', 'subtype': 'smooth'})
     chart2.add_series({
         'name':       [worksheetName, 1, int(4*len(SXX)+1)] ,  
@@ -833,9 +855,8 @@ if ExcelOutput == 'YES':
     chart2.set_x_axis({'name': SXlab,
                 'name_font': {
                     'name': 'Segoe UI',
-                    'size': 15,
+                    'size': 14,
                     'bold': True},
-    #                      'label_position': 'low',
                 'num_font':  {'name': 'Segoe UI','size':12 },
                 'line': {'color': 'black','width': 1.00},
                 'major_gridlines': {
@@ -847,9 +868,11 @@ if ExcelOutput == 'YES':
     chart2.set_y_axis({'name': SYlab,
                 'name_font': {
                         'name': 'Segoe UI',
-                        'size': 15,
+                        'size': 14,
                         'bold': True},
-    #                  'label_position': 'low',
+                'name_layout':{
+                            'x':      0.0,
+                            'y':      0.45},
                 'num_font':  {'name': 'Segoe UI','size':12 },
                 'line': {'color': 'black','width': 1.00},
                 'major_gridlines': {
@@ -860,7 +883,7 @@ if ExcelOutput == 'YES':
                 'minor_tick_mark': 'none'})
     chart2.set_title({'none': True})
     chart2.set_legend({'none': True})
-    worksheet3.insert_chart(1, 3, chart2,{'x_scale': 1.5, 'y_scale': 1.5} )
+    worksheet3.insert_chart(5+18*1, 3, chart2,{'x_scale': 1.058, 'y_scale': 1.227} )
 
     ######### CHART 3 ##########
     chart3 =  workbook.add_chart({'type': 'scatter', 'subtype': 'smooth'})
@@ -874,9 +897,8 @@ if ExcelOutput == 'YES':
     chart3.set_x_axis({'name': SXlab,
                 'name_font': {
                     'name': 'Segoe UI',
-                    'size': 15,
+                    'size': 14,
                     'bold': True},
-    #                      'label_position': 'low',
                 'num_font':  {'name': 'Segoe UI','size':12 },
                 'line': {'color': 'black','width': 1.00},
                 'major_gridlines': {
@@ -888,9 +910,11 @@ if ExcelOutput == 'YES':
     chart3.set_y_axis({'name': SYlab,
                 'name_font': {
                     'name': 'Segoe UI',
-                    'size': 15,
+                    'size': 14,
                     'bold': True},
-    #                  'label_position': 'low',
+                'name_layout':{
+                            'x':      0.0,
+                            'y':      0.45},
                 'num_font':  {'name': 'Segoe UI','size':12 },
                 'line': {'color': 'black','width': 1.00},
                 'major_gridlines': {
@@ -901,7 +925,7 @@ if ExcelOutput == 'YES':
                 'minor_tick_mark': 'none'})
     chart3.set_title({'none': True})
     chart3.set_legend({'none': True})
-    worksheet3.insert_chart(30, 3, chart3,{'x_scale': 1.5, 'y_scale': 1.5} )
+    worksheet3.insert_chart(5+18*2, 3, chart3,{'x_scale': 1.058, 'y_scale': 1.227} )
     workbook.close()
 else:
     pass

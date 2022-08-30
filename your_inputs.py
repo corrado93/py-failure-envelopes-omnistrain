@@ -1,6 +1,6 @@
 # ------------------------- User INPUT ------------------------------- #
 
-OmniLPF = 'NO'         #'YES' or 'NO': 
+OmniLPF = 'YES'         #'YES' or 'NO': 
 #                       'YES' for Omni Last Ply Failure (LPF) envelopes,
 #                             generated using degraded material proper-
 #                             ties.
@@ -40,9 +40,9 @@ material = material_data.EglassMY750
 
 Symmetric = 'YES'       #'YES' or 'NO'
 # INPUT YOUR LAYUP BELOW [use orientation from -90 to 90]
-Layup = [45, 0, -45, 90]
-#Layup = [55, -55]
+Layup = [55, -55]
 #Layup = [0, 0, 90, 90, 0, 0]
+#Layup = [45, 0, -45, 90]
 
 # Omni-strain envelope
 # Choose the strain loading on X axis 
