@@ -559,16 +559,23 @@ if ExcelOutput == 'YES':
         '_' + mat_label + '.xlsx')
     #
     worksheet1 = workbook.add_worksheet('Overview')
-    worksheet1.write_string(1, 1, 'BRIEF OVERVIEW OF THE WORKBOOK:',)
+    format0 = workbook.add_format({'bold': True,
+                'font_name': 'Segoe UI',
+                'font_size':11, 
+                                })
+    format1 = workbook.add_format({'font_name': 'Segoe UI',
+                'font_size':11, 
+                                })
+    worksheet1.write_string(1, 1, 'BRIEF OVERVIEW OF THE WORKBOOK:',format0)
     worksheet1.write_string(2, 1, '-In this workbook you will find the '+
                             Omni_label + ' envelope for '+
-                            mat_label + '.',)
+                            mat_label + '.', format1)
     worksheet1.write_string(3, 1, '-Under the assumption of "'+ load_label_long + '"' 
                             ' , load was applied in the following axis:  '+
-                            SXlab + ' - ' + SYlab,)
+                            SXlab + ' - ' + SYlab, format1)
     worksheet1.write_string(4, 1, '-The laminate layup considered for the '+
                             ' the generation of ' + Omni_label +
-                            ' in stress space is: ' + Layup_label,)
+                            ' in stress space is: ' + Layup_label, format1)
     #
     worksheetName = 'Omni-strain failure data'
     worksheet2 = workbook.add_worksheet(worksheetName)

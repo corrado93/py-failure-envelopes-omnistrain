@@ -10,7 +10,7 @@ OmniLPF = 'YES'         #'YES' or 'NO':
 PlaneStress_2D = 'NO'  #'YES' or 'NO':
 #                       'YES' for failure envelopes under plane stress 
 #                             conditions (in-plane loading)
-#                       'NO' for failure envleopes under general loading 
+#                       'NO' for failure envelopes under general loading 
 #                             conditions (3D)   
 # 
 ExcelOutput = 'YES'    #'YES' or 'NO':
