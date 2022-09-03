@@ -374,7 +374,7 @@ for thetaRdeg in ThetaS:
 
             # compute the value for the mean interval value
             c = (a + b) / 2.0
-            DELTA_F, FLAG, THETADEG, PHI_D, PSI_D, SXX, SYY = get_delta_F(c, 
+            DELTA_F, FLAG, THETADEG,PHI_D,PSI_D,SXX,SYY = get_delta_F(c, 
                                 GAMM, SX, SY, TOLER, DEG2RAD, a1, a2, 
                                 a32T, a3T, a32C, a3C, PHIC, XT, XC,
                                 YC, SL, ST, beta, G12, nu12, T2, Kstif)
@@ -538,7 +538,8 @@ if PlotFigure == 'YES':
     for i in range(len(SXX)):
         plt.plot(SXX[i], SYY[i], colours[i], linewidth=2.0,
                 label='[' + str(i * deltaTheta) + ']')
-    plt.plot(SXXmin, SYYmin, color='k', linewidth=3.0, label=' '+Omni_label)
+    plt.plot(SXXmin, SYYmin, color='k', linewidth=3.0, 
+                            label=' '+ Omni_label)
 
     ax.legend(loc='upper center', bbox_to_anchor=(1.25, 0.75))
 
@@ -566,16 +567,20 @@ if ExcelOutput == 'YES':
     format1 = workbook.add_format({'font_name': 'Segoe UI',
                 'font_size':11, 
                                 })
-    worksheet1.write_string(1, 1, 'BRIEF OVERVIEW OF THE WORKBOOK:',format0)
-    worksheet1.write_string(2, 1, '-In this workbook you will find the '+
-                            Omni_label + ' envelope for '+
+    worksheet1.write_string(1, 1, 
+                            'BRIEF OVERVIEW OF THE WORKBOOK:', format0)
+    worksheet1.write_string(2, 1, 
+                            '-In this workbook you will find the ' +
+                            Omni_label + ' envelope for ' +
                             mat_label + '.', format1)
-    worksheet1.write_string(3, 1, '-Under the assumption of "'+ load_label_long + '"' 
-                            ' , load was applied in the following axis:  '+
+    worksheet1.write_string(3, 1, 
+                        '-Under the assumption of "' + load_label_long + 
+                        '", load was applied in the following axis:  ' +
                             SXlab + ' - ' + SYlab, format1)
-    worksheet1.write_string(4, 1, '-The laminate layup considered for the '+
-                            ' the generation of ' + Omni_label +
-                            ' in stress space is: ' + Layup_label, format1)
+    worksheet1.write_string(4, 1, 
+                        '-The laminate layup considered for the '+
+                        ' the generation of ' + Omni_label +
+                        ' in stress space is: ' + Layup_label, format1)
     #
     worksheetName = 'Omni-strain failure data'
     worksheet2 = workbook.add_worksheet(worksheetName)
@@ -622,8 +627,10 @@ if ExcelOutput == 'YES':
                                 header_format)
         chart.add_series({
             'name':       [worksheetName, 1, int(4*i)]  ,
-            'categories': [worksheetName, 3, int(4*i), int(ENNE_deg+3), int(4*i)],
-            'values':     [worksheetName, 3, int(1+4*i), int(ENNE_deg+3), int(1+4*i)],
+            'categories': [worksheetName, 3, int(4*i), 
+                                        int(ENNE_deg+3), int(4*i)],
+            'values':     [worksheetName, 3, int(1+4*i), 
+                                        int(ENNE_deg+3), int(1+4*i)],
             'line':       {'width': 1.20,},
             })
     #
@@ -631,7 +638,8 @@ if ExcelOutput == 'YES':
     worksheet2.write_column(3, int(4*len(SXX)+1), SXXmin)
     worksheet2.write_string(2, int(4*len(SXX)+2), SYlab, header_format)
     worksheet2.write_column(3, int(4*len(SXX)+2), SYYmin)
-    worksheet2.write_string(1, int(4*len(SXX)+1), Omni_label + ' in strain space', header_format2)
+    worksheet2.write_string(1, int(4*len(SXX)+1), 
+                        Omni_label + ' in strain space', header_format2)
     worksheet2.write_string(2, int(4*len(SXX)+3), 'Flags', header_format)
     worksheet2.write_column(3, int(4*len(SXX)+3), FLAGcrit)
     worksheet2.write_column(3, int(4*len(SXX)+4), FLAGmarker)
@@ -640,16 +648,21 @@ if ExcelOutput == 'YES':
     worksheet2.write_column(3, int(4*len(SXX)+7), SSXXmin)
     worksheet2.write_string(2, int(4*len(SXX)+8), SSYlab, header_format)
     worksheet2.write_column(3, int(4*len(SXX)+8), SSYYmin)
-    worksheet2.write_string(1, int(4*len(SXX)+7), Omni_label+ ' in stress space ', header_format2)
-    worksheet2.write_string(0, int(4*len(SXX)+7), 'Layup : '+ Layup_label, header_format2)
+    worksheet2.write_string(1, int(4*len(SXX)+7), 
+                        Omni_label+ ' in stress space ', header_format2)
+    worksheet2.write_string(0, int(4*len(SXX)+7), 
+                        'Layup : '+ Layup_label, header_format2)
     worksheet2.write_column(3, int(4*len(SXX)+9), PHIcrit)
-    worksheet2.write_string(2, int(4*len(SXX)+9), 'ϕ (deg)', header_format)
-    worksheet2.data_validation(2, int(4*len(SXX)+9),2, int(4*len(SXX)+9),{
-            'validate': 'any','input_message': 'Kinking angle (deg)',})
+    worksheet2.write_string(2, int(4*len(SXX)+9), 
+                        'ϕ (deg)', header_format)
+    worksheet2.data_validation(2, int(4*len(SXX)+9),
+            2, int(4*len(SXX)+9),{'validate': 'any',
+            'input_message': 'Kinking angle (deg)',})
     worksheet2.write_column(3, int(4*len(SXX)+10), PSIcrit)
-    worksheet2.write_string(2, int(4*len(SXX)+10), 'ψ (deg)', header_format)
-    worksheet2.data_validation(2, int(4*len(SXX)+10),2, int(4*len(SXX)+10),{
-            'validate': 'any','input_message': 
+    worksheet2.write_string(2, int(4*len(SXX)+10), 
+            'ψ (deg)', header_format)
+    worksheet2.data_validation(2, int(4*len(SXX)+10),2, 
+            int(4*len(SXX)+10),{ 'validate': 'any','input_message': 
             'Angle of the kinking plane (deg)',})
     #
     ##########################################################################
@@ -658,8 +671,10 @@ if ExcelOutput == 'YES':
 
     chart.add_series({
         'name':       [worksheetName, 1, int(4*len(SXX)+1)] ,  
-        'categories': [worksheetName, 3, int(4*len(SXX)+1), int(ENNE_deg+3), int(4*len(SXX)+1)],
-        'values':     [worksheetName, 3, int(4*len(SXX)+2), int(ENNE_deg+3), int(4*len(SXX)+2)],
+        'categories': [worksheetName, 3, int(4*len(SXX)+1), 
+                                    int(ENNE_deg+3), int(4*len(SXX)+1)],
+        'values':     [worksheetName, 3, int(4*len(SXX)+2), 
+                                    int(ENNE_deg+3), int(4*len(SXX)+2)],
         'line':       {'color': 'black', 'dash_type':'dash'},
         #dash_type can be: 'solid','round_dot','square_dot','dash','dash_dot'
         #                  'long_dash','long_dash_dot','long_dash_dot_dot'
@@ -711,15 +726,18 @@ if ExcelOutput == 'YES':
                                'y':      0.12,
                                'width':  0.24,
                                'height': 0.80,}})
-    worksheet3.insert_chart(3+18*0, 3, chart,{'x_scale': 1.194, 'y_scale': 1.227} )
+    worksheet3.insert_chart(3+18*0, 3, chart,
+                                {'x_scale': 1.194, 'y_scale': 1.227} )
     ######### CHART 1 ##########
     chart1 =  workbook.add_chart({'type': 'scatter', 'subtype': 'smooth'})
     #scatter has the following subtypes: straight_with_markers, straight
     #                                    smooth_with_markers, smooth
     chart1.add_series({
         'name':       [worksheetName, 1, int(4*len(SXX)+7)] ,  
-        'categories': [worksheetName, 3, int(4*len(SXX)+7), int(ENNE_deg+3), int(4*len(SXX)+7)],
-        'values':     [worksheetName, 3, int(4*len(SXX)+8), int(ENNE_deg+3), int(4*len(SXX)+8)],
+        'categories': [worksheetName, 3, int(4*len(SXX)+7), 
+                                    int(ENNE_deg+3), int(4*len(SXX)+7)],
+        'values':     [worksheetName, 3, int(4*len(SXX)+8), 
+                                    int(ENNE_deg+3), int(4*len(SXX)+8)],
         'line':       {'color': 'black'},
         })
     chart1.set_x_axis({'name': SSXlab + ' [MPa]',
@@ -758,31 +776,45 @@ if ExcelOutput == 'YES':
                         'bold': True}},)
     chart1.set_legend({'font': {'name': 'Segoe UI','size': 10.5}, 
                     'position': 'right'})
-    worksheet3.insert_chart(3+18*0, 13, chart1,{'x_scale': 1.194, 'y_scale': 1.227} )
+    worksheet3.insert_chart(3+18*0, 13, chart1,
+                                {'x_scale': 1.194, 'y_scale': 1.227} )
 
     ######### CHART 2 ##########
     worksheet3.write_string(6+18*1, 11, 'LEGEND:')
-    cell_format = workbook.add_format({'bold': True, 'font_color': 'cyan'})
-    worksheet3.write_string(7+18*1, 11, 'triangle(cyan): Fibre tensile failure',cell_format)
-    cell_format = workbook.add_format({'bold': True, 'font_color': 'green'})
-    worksheet3.write_string(8+18*1, 11, 'x(green): Fibre kinking when I3>0',cell_format)
-    worksheet3.write_string(10+18*1, 11, 'o(green): Matrix cracking when I3>0',cell_format)
-    cell_format = workbook.add_format({'bold': True, 'font_color': 'red'})
-    worksheet3.write_string(9+18*1, 11, 'x(red): Fibre kinking when I3<0',cell_format)
-    worksheet3.write_string(11+18*1, 11, 'o(red): Matrix cracking when I3<0',cell_format)
-    chart2 =  workbook.add_chart({'type': 'scatter', 'subtype': 'smooth'})
+    cell_format = workbook.add_format({'bold': True, 
+                                        'font_color': 'cyan'})
+    worksheet3.write_string(7+18*1, 11, 
+                    'triangle(cyan): Fibre tensile failure',cell_format)
+    cell_format = workbook.add_format({'bold': True, 
+                                        'font_color': 'green'})
+    worksheet3.write_string(8+18*1, 11, 
+                    'x(green): Fibre kinking when I3>0',cell_format)
+    worksheet3.write_string(10+18*1, 11, 
+                    'o(green): Matrix cracking when I3>0',cell_format)
+    cell_format = workbook.add_format({'bold': True, 
+                                        'font_color': 'red'})
+    worksheet3.write_string(9+18*1, 11, 
+                    'x(red): Fibre kinking when I3<0',cell_format)
+    worksheet3.write_string(11+18*1, 11, 
+                    'o(red): Matrix cracking when I3<0',cell_format)
+    chart2 =  workbook.add_chart({'type': 'scatter', 
+                                    'subtype': 'smooth'})
     chart2.add_series({
         'name':       [worksheetName, 1, int(4*len(SXX)+1)] ,  
-        'categories': [worksheetName, 3, int(4*len(SXX)+1), int(ENNE_deg+3), int(4*len(SXX)+1)],
-        'values':     [worksheetName, 3, int(4*len(SXX)+2), int(ENNE_deg+3), int(4*len(SXX)+2)],
+        'categories': [worksheetName, 3, int(4*len(SXX)+1), 
+                                    int(ENNE_deg+3), int(4*len(SXX)+1)],
+        'values':     [worksheetName, 3, int(4*len(SXX)+2), 
+                                    int(ENNE_deg+3), int(4*len(SXX)+2)],
         'line':       {'color': 'black','width': 1.00},
         })
     delta_value = 4*ENNE
     for i in range(0,len(FLAGmarker),delta_value):
         if FLAGmarker[i] == 'x':
             chart2.add_series({
-                'categories': [worksheetName, 3+i, int(4*len(SXX)+1), int(i+3), int(4*len(SXX)+1)],
-                'values':     [worksheetName, 3+i, int(4*len(SXX)+2), int(i+3), int(4*len(SXX)+2)],
+                'categories': [worksheetName, 3+i, int(4*len(SXX)+1), 
+                                        int(i+3), int(4*len(SXX)+1)],
+                'values':     [worksheetName, 3+i, int(4*len(SXX)+2), 
+                                        int(i+3), int(4*len(SXX)+2)],
                 'marker':     {
                      'type': FLAGmarker[i],
                      'size': 5,
@@ -790,8 +822,10 @@ if ExcelOutput == 'YES':
                      'fill':   {'none': True},},})
         elif FLAGmarker[i] == 'triangle':
             chart2.add_series({
-                'categories': [worksheetName, 3+i, int(4*len(SXX)+1), int(i+3), int(4*len(SXX)+1)],
-                'values':     [worksheetName, 3+i, int(4*len(SXX)+2), int(i+3), int(4*len(SXX)+2)],
+                'categories': [worksheetName, 3+i, int(4*len(SXX)+1), 
+                                        int(i+3), int(4*len(SXX)+1)],
+                'values':     [worksheetName, 3+i, int(4*len(SXX)+2), 
+                                        int(i+3), int(4*len(SXX)+2)],
                 'marker':     {
                      'type': FLAGmarker[i],
                      'size': 5,
@@ -799,8 +833,10 @@ if ExcelOutput == 'YES':
                      'fill':   {'color': FLAGcolour[i]},},})
         else:
             chart2.add_series({
-                'categories': [worksheetName, 3+i, int(4*len(SXX)+1), int(i+3), int(4*len(SXX)+1)],
-                'values':     [worksheetName, 3+i, int(4*len(SXX)+2), int(i+3), int(4*len(SXX)+2)],
+                'categories': [worksheetName, 3+i, int(4*len(SXX)+1), 
+                                        int(i+3), int(4*len(SXX)+1)],
+                'values':     [worksheetName, 3+i, int(4*len(SXX)+2), 
+                                        int(i+3), int(4*len(SXX)+2)],
                 'marker':     {
                      'type': FLAGmarker[i],
                      'size': 5,
@@ -839,15 +875,18 @@ if ExcelOutput == 'YES':
                 'minor_tick_mark': 'none'})
     chart2.set_title({'none': True})
     chart2.set_legend({'none': True})
-    worksheet3.insert_chart(5+18*1, 3, chart2,{'x_scale': 1.058, 'y_scale': 1.227} )
+    worksheet3.insert_chart(5+18*1, 3, chart2,
+                                {'x_scale': 1.058, 'y_scale': 1.227} )
 
     ######### CHART 3 ##########
     chart3 =  workbook.add_chart({'type': 'scatter', 'subtype': 'smooth'})
     delta_value=3*ENNE
     for i in range(0,len(FLAGmarker),delta_value):
         chart3.add_series({
-            'categories': [worksheetName, 3+i, int(4*len(SXX)+1), int(i+3+delta_value), int(4*len(SXX)+1)],
-            'values':     [worksheetName, 3+i, int(4*len(SXX)+2), int(i+3+delta_value), int(4*len(SXX)+2)],
+            'categories': [worksheetName, 3+i, int(4*len(SXX)+1), 
+                            int(i+3+delta_value), int(4*len(SXX)+1)],
+            'values':     [worksheetName, 3+i, int(4*len(SXX)+2), 
+                            int(i+3+delta_value), int(4*len(SXX)+2)],
             'line':       {'color': FLAGcolour[i],'width': 1.00},
             })
     chart3.set_x_axis({'name': SXlab,
@@ -881,7 +920,8 @@ if ExcelOutput == 'YES':
                 'minor_tick_mark': 'none'})
     chart3.set_title({'none': True})
     chart3.set_legend({'none': True})
-    worksheet3.insert_chart(5+18*2, 3, chart3,{'x_scale': 1.058, 'y_scale': 1.227} )
+    worksheet3.insert_chart(5+18*2, 3, chart3,
+                                {'x_scale': 1.058, 'y_scale': 1.227} )
     workbook.close()
 else:
     pass
